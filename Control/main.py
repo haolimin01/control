@@ -16,12 +16,10 @@ def redirect_index():
 
 @app.route('/index/')
 def index():
-    data = {
-        'author': 'HaoLimin',
-        'email': 'haolimin01@baidu.com',
-        'about': 'This is a small Flask App with sqlite3 developed by me :)'
-    }
-    return json.dumps(data, ensure_ascii=False) + '\n'
+    author = 'HaoLimin'
+    emial = 'haolimin01@baidu.com'
+    about = 'his is a small Flask App with sqlite3 developed by me :)'
+    return send_index(author=author, email=emial, about=about)
 
 
 @app.route('/post/status/', methods=['GET', 'POST'])
@@ -29,11 +27,7 @@ def post_status():
     if request.method == 'GET':
         error = True
         detail = 'Please use POST method and upload the device info of mac,name,task,status,limitation,maxup and maxdown.'
-        data = {
-            'error': error,
-            'detail': detail
-        }
-        return json.dumps(data, ensure_ascii=False) + '\n'
+        return send_msg(error=error, detail=detail)
     elif request.method == 'POST':
         success = post_status_data(request.json)
         if success:
@@ -42,11 +36,7 @@ def post_status():
         else:
             error = True
             detail = 'Post data failed.'
-        data = {
-            'error': error,
-            'detail': detail
-        }
-        return json.dumps(data, ensure_ascii=False) + '\n'
+        return send_msg(error=error, detail=detail)
 
 
 
@@ -57,23 +47,25 @@ def post_status():
 # @app.route('/update/network/')
 #
 # 指定查询设备设备或是全部数据
-@app.route('/status/', methods=['GET'])
+@app.route('/status/', methods=['POST', 'GET'])
 def get_status():
-    
+    if request.method == 'POST':
+        error = True
+        detail = "Please use GET method with or without the device's mac address."
+        return send_msg(error=error, detail=detail)
+    elif request.method == 'GET':
+        mac = request.args.get('mac', None)
+        if mac:
+            pass
+            #show(mac=mac)
+        else:
+            pass
+            #show()
+        return mac
+
 
 # @app.route('/email/')
 
-
-@app.route('/limit/', methods=['POST', 'GET'])
-def limit():
-    if request.method == 'GET':
-        return 'Please upload limit info.'
-    elif request.method == 'POST':
-        content = request.json
-        mac = content['ma']
-        print(mac)
-        return 'done\n'
-    return 'error ...'
 
 
 @app.before_request
