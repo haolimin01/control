@@ -18,7 +18,7 @@ def redirect_index():
 def index():
     author = 'HaoLimin'
     emial = 'haolimin01@baidu.com'
-    about = 'his is a small Flask App with sqlite3 developed by me :)'
+    about = 'This is a small Flask App with sqlite3 developed by me :)'
     return send_index(author=author, email=emial, about=about)
 
 
@@ -56,16 +56,27 @@ def get_status():
     elif request.method == 'GET':
         mac = request.args.get('mac', None)
         if mac:
-            pass
-            #show(mac=mac)
+            result = show(mac=mac)
         else:
-            pass
-            #show()
-        return mac
+            result = show_all()
+        if result is False:
+            error = True
+            detail = 'Table or mac address is not exist'
+            return send_msg(error=error, detail=detail)
+        else:
+            return result
 
 
 # @app.route('/email/')
 
+@app.route('/update/task', methods=['GET', 'POST'])
+def update_task():
+    if request.method == 'GET':
+        error = True
+        detail = "Please use POST method and upload the device's mac and task"
+        return send_msg(error=error, detail=detail)
+    elif request.method == 'POST':
+        return 'post'
 
 
 @app.before_request
@@ -98,6 +109,31 @@ def post_status_data(content):
         return success
     else:
         return False
+
+# 先使用json格式返回数据，后面使用html页面表格形式
+def show(mac=None):
+    if mac is None:
+        return False
+    elif not g.db.mac_exist(mac=mac):
+        return False
+    else:
+        result = g.db.query(mac=mac)
+        if request is None:
+            return False
+        else:
+            return result
+
+
+
+
+# 先使用json格式返回数据，后面使用html页面表格形式
+def show_all():
+    if not g.db.table_exist():
+        return False
+    else:
+        result = g.db.display_all()
+        return result
+
 
 
 

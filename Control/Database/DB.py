@@ -4,7 +4,7 @@ import json
 
 
 class DB:
-    DATABASE = '/Database/brain.sql'
+    DATABASE = 'brain.sql'
 
     def __init__(self, table='status'):
         self.table = table
