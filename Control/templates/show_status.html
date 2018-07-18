@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>status</title>
+</head>
+<body>
+<table border="1" align="center" >
+    <caption>Device Status</caption>
+    <tr>
+        <td align="center">mac</td>
+        <td align="center">name</td>
+        <td align="center">task</td>
+        <td align="center">status</td>
+        <td align="center">limitation</td>
+        <td align="center">maxup</td>
+        <td align="center">maxdown</td>
+    </tr>
+    {% if type == 'list' %}
+        {% for device in result %}
+            <tr>
+                <td align="center">{{ device.mac }}</td>
+                <td align="center">{{ device.name }}</td>
+                <td align="center">{{ device.task }}</td>
+                <td align="center">{{ device.status }}</td>
+                <td align="center">{{ device.limitation }}</td>
+                <td align="center">{{ device.maxup }}</td>
+                <td align="center">{{ device.maxdown }}</td>
+            </tr>
+        {% endfor %}
+    {% elif type == 'dict' %}
+        <tr>
+            <td align="center">{{ result.mac }}</td>
+            <td align="center">{{ result.name }}</td>
+            <td align="center">{{ result.task }}</td>
+            <td align="center">{{ result.status }}</td>
+            <td align="center">{{ result.limitation }}</td>
+            <td align="center">{{ result.maxup }}</td>
+            <td align="center">{{ result.maxdown }}</td>
+        </tr>
+    {% endif %}
+</table>
+</body>
+</html>

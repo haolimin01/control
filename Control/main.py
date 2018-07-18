@@ -1,4 +1,4 @@
-from flask import abort, redirect, url_for, request, Flask, g
+from flask import abort, redirect, url_for, request, Flask, g, render_template
 import json
 from Database.DB import DB
 from utils.utils import *
@@ -17,7 +17,7 @@ def redirect_index():
 @app.route('/index/')
 def index():
     author = 'HaoLimin'
-    emial = 'haolimin01@baidu.com'
+    emial = '15029182243@163.com'
     about = 'This is a small Flask App with sqlite3 developed by me :)'
     return send_index(author=author, email=emial, about=about)
 
@@ -64,7 +64,11 @@ def get_status():
             detail = 'Table or mac address is not exist'
             return send_msg(error=error, detail=detail)
         else:
-            return result
+            result = json.loads(result)
+            if type(result) is list:
+                return render_template('show_status.html', result=result, type='list')
+            elif type(result) is dict:
+                return render_template('show_status.html', result=result, type='dict')
 
 
 # @app.route('/email/')
@@ -110,7 +114,7 @@ def post_status_data(content):
     else:
         return False
 
-# 先使用json格式返回数据，后面使用html页面表格形式
+
 def show(mac=None):
     if mac is None:
         return False
@@ -124,18 +128,12 @@ def show(mac=None):
             return result
 
 
-
-
-# 先使用json格式返回数据，后面使用html页面表格形式
 def show_all():
     if not g.db.table_exist():
         return False
     else:
         result = g.db.display_all()
         return result
-
-
-
 
 
 if __name__ == '__main__':
